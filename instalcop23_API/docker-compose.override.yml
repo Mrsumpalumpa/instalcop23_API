@@ -1,0 +1,41 @@
+# version: "3.7"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      /bin/bash -c "python manage.py migrate&& python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:80"
+    volumes:
+      - .:/app
+    ports:
+      - ${BACKEND_PORT}:80
+      - 6900:3000
+    environment:
+      MYSQL_HOST: db
+      DEBUG: "${DEBUG}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      # MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      # JWT_SECRET_KEY: "${JWT_SECRET_KEY}"
+      # AD_URL: "${AD_URL}"
+      # AD_ROBOT_PWD: "${AD_ROBOT_PWD}"
+      # AD_ROBOT_USR: "${AD_ROBOT_USR}"
+    depends_on:
+      - db
+    links:
+      - db
+  db:
+    restart: always
+    image: mariadb:10.8.2
+    volumes:
+      - ${DATABASE_PATH}:/var/lib/mysql
+    ports:
+      - "${MYSQL_PORT}:3306"
+    environment:
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_ROOT_HOST: "${MYSQL_ROOT_HOST}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"

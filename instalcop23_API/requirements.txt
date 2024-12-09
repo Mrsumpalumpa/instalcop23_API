@@ -1,0 +1,13 @@
+django==4.2.
+django-ninja==0.22.
+django-auto-prefetch==1.4.0
+django-mirage-field==1.4.0
+django-cors-headers
+
+mysqlclient==2.1.0
+ninja==1.10.2
+requests==2.23.0
+PyJWT==2.8.0
+gunicorn
+
+debugpy==1.5.1
